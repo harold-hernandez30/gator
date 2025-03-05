@@ -2,6 +2,7 @@ package commands
 
 import (
 	"gator/internal/config"
+	"gator/internal/database"
 )
 
 type Command struct {
@@ -12,4 +13,5 @@ type Command struct {
 
 type State struct {
 	Config *config.Config
+	DB *database.Queries
 }

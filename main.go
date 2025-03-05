@@ -1,10 +1,14 @@
 package main
 
 import (
+	"database/sql"
 	"gator/internal/commands"
 	"gator/internal/config"
+	"gator/internal/database"
 	"log"
 	"os"
+
+	_ "github.com/lib/pq"
 )
 
 func main()  {
@@ -16,7 +20,18 @@ func main()  {
 	var state = commands.State{
 		Config: &configFile,
 	}
+
+	db, openDbErr := sql.Open("postgres", configFile.DBUrl)
+
+	if openDbErr != nil {
+		log.Fatalf("unable to load database, %v", openDbErr)
+	}
+
+	dbQueries := database.New(db)
+	state.DB = dbQueries
+
 	myCommands.Register("login", commands.CommandLogin)
+	myCommands.Register("register", commands.CommandRegister)
 
 	if len(os.Args) <= 1 {
 		log.Fatal("not enough arguments were provided")
