@@ -7,4 +7,4 @@ CREATE TABLE users (
     name TEXT UNIQUE
 );
 -- +goose Down
-DROP TABLE users;
+DROP TABLE IF EXISTS users;

@@ -14,6 +14,12 @@ sudo -u postgres psql
 \c gator
 ```
 
+#### Show Table relations
+
+```bash
+\dt
+```
+
 ## Migrate Up/Down
 
 ### Migrate up
