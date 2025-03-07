@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"gator/internal/database"
 	"time"
@@ -18,22 +17,19 @@ func CommandRegister(s *State, cmd Command) error {
 
 	context := context.Background()
 	
-	nameNullString := sql.NullString{
-		String: cmd.Args[0],
-		Valid: true,
-	}
+	name := cmd.Args[0]
 
-	_, err := s.DB.GetUser(context, nameNullString)
+	_, err := s.DB.GetUser(context, name)
 
 	if err == nil {
-		return fmt.Errorf("user with '%v' already exists", nameNullString.String)
+		return fmt.Errorf("user with '%v' already exists", name)
 	}
 
 	params := database.CreateUserParams{
 		ID: uuid.New(),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
-		Name: nameNullString,
+		Name: name,
 	}
 
 	user, err := s.DB.CreateUser(context, params)
@@ -43,7 +39,7 @@ func CommandRegister(s *State, cmd Command) error {
 	}
 
 	fmt.Printf("New user created: %+v\n", user)
-	s.Config.SetUser(user.Name.String)
+	s.Config.SetUser(user.Name)
 
 	return nil
  }

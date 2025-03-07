@@ -15,10 +15,10 @@ func CommandGetUsers (state *State, cmd Command) error {
 
 	for _, user := range users {
 
-		if user.Name.String == state.Config.CurrentUserName {
-			fmt.Printf("* %s (current)\n", user.Name.String)
+		if user.Name == state.Config.CurrentUserName {
+			fmt.Printf("* %s (current)\n", user.Name)
 		} else {
-			fmt.Printf("* %s\n", user.Name.String)
+			fmt.Printf("* %s\n", user.Name)
 		}
 	}
 	return nil
