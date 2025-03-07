@@ -34,6 +34,7 @@ func main()  {
 	myCommands.Register("register", commands.CommandRegister)
 	myCommands.Register("reset", commands.CommandReset)
 	myCommands.Register("users", commands.CommandGetUsers)
+	myCommands.Register("agg", commands.CommandAgg)
 
 	if len(os.Args) <= 1 {
 		log.Fatal("not enough arguments were provided")
