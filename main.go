@@ -5,6 +5,7 @@ import (
 	"gator/internal/commands"
 	"gator/internal/config"
 	"gator/internal/database"
+	"gator/internal/middleware"
 	"log"
 	"os"
 
@@ -35,8 +36,10 @@ func main()  {
 	myCommands.Register("reset", commands.CommandReset)
 	myCommands.Register("users", commands.CommandGetUsers)
 	myCommands.Register("agg", commands.CommandAgg)
-	myCommands.Register("addfeed", commands.CommandAddFeed)
+	myCommands.Register("addfeed", middleware.MiddlewareHandleLoggedIn(commands.CommandAddFeed))
 	myCommands.Register("feeds", commands.CommandGetFeeds)
+	myCommands.Register("follow", middleware.MiddlewareHandleLoggedIn(commands.CommandFollow))
+	myCommands.Register("following", middleware.MiddlewareHandleLoggedIn(commands.CommandFollowing))
 
 	if len(os.Args) <= 1 {
 		log.Fatal("not enough arguments were provided")

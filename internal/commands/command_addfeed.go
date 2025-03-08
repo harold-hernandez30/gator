@@ -10,15 +10,9 @@ import (
 	"github.com/google/uuid"
 )
 
-func CommandAddFeed(state *State, cmd Command) error {
+func CommandAddFeed(state *State, cmd Command, user database.User) error {
 	if len(cmd.Args) < 2 {
 		log.Fatal("must provide 2 arguments")
-	}
-	currentUserName := state.Config.CurrentUserName
-	currentUser, err := state.DB.GetUser(context.Background(), currentUserName)
-
-	if err != nil {
-		return err
 	}
 
 	feedName := cmd.Args[0]
@@ -28,7 +22,7 @@ func CommandAddFeed(state *State, cmd Command) error {
 		ID: uuid.New(),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
-		UserID: currentUser.ID,
+		UserID: user.ID,
 		Name: feedName,
 		Url: feedUrl,
 	}
@@ -37,6 +31,19 @@ func CommandAddFeed(state *State, cmd Command) error {
 
 	if feedCreateErr != nil {
 		return feedCreateErr
+	}
+	feedFollowParams := database.CreateFeedFollowParams{
+		ID: uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		UserID: user.ID,
+		FeedID: feed.ID,
+	}
+
+	_, createFeedFollowErr := state.DB.CreateFeedFollow(context.Background(), feedFollowParams)
+
+	if createFeedFollowErr != nil {
+		log.Fatal("unable to follow feed from current logged in user")
 	}
 
 	fmt.Printf("New Feed record inserted: %v\n", feed)

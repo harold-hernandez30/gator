@@ -13,7 +13,7 @@ func CommandReset(s *State, cmd Command) error {
 	if err != nil {
 		return fmt.Errorf("could not delete all user rows")
 	}
-	fmt.Print("users table dropped\n")
+	fmt.Print("removed all user rows\n")
 
 	return nil
  }
