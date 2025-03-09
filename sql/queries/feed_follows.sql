@@ -42,4 +42,6 @@ FROM feed_follow_item
         ON users.id = feed_follow_item.user_id
 WHERE users.id = $1;
 
- 
+-- name: UnfollowFeed :exec
+DELETE FROM feed_follows
+WHERE feed_id = $1 AND user_id = $2;
