@@ -6,7 +6,10 @@ import (
 	"fmt"
 	"gator/internal/database"
 	"gator/internal/feed"
+	"log"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 func CommandAgg(state *State, cmd Command) error {
@@ -30,6 +33,8 @@ func CommandAgg(state *State, cmd Command) error {
 		if scrapeErr != nil {
 			break
 		}
+		
+		fmt.Printf("feed collected\n")
 	}
 
 	
@@ -65,7 +70,26 @@ func scrapeFeeds(state *State) error{
 	}
 
 	for _, feedItem := range resFeed.Channel.Items {
-		fmt.Printf("%s\n", feedItem.Title)
+
+		var convertedPubDate sql.NullTime
+
+		convertedPubDate.Scan(feedItem.PublicationDate)
+	
+		createPostParams := database.CreatePostParams{
+			ID: uuid.New(),
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+			PublishedAt:  convertedPubDate.Time,
+			Description: feedItem.Description,
+			Title: feedItem.Title,
+			Url: feedItem.Link,
+			FeedID: nextFeedToFetch.ID,
+		}
+		_, createPostErr := state.DB.CreatePost(context.Background(), createPostParams)
+
+		if createPostErr != nil {
+			log.Default().Printf("error creating post: %v", createPostErr)
+		}
 	}
 
 	return nil

@@ -41,6 +41,7 @@ func main()  {
 	myCommands.Register("follow", middleware.MiddlewareHandleLoggedIn(commands.CommandFollow))
 	myCommands.Register("following", middleware.MiddlewareHandleLoggedIn(commands.CommandFollowing))
 	myCommands.Register("unfollow", middleware.MiddlewareHandleLoggedIn(commands.CommandUnfollowFeed))
+	myCommands.Register("browse", middleware.MiddlewareHandleLoggedIn(commands.CommandBrowse))
 
 	if len(os.Args) <= 1 {
 		log.Fatal("not enough arguments were provided")
