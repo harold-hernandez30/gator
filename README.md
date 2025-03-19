@@ -1,5 +1,56 @@
 # Overview - Gator
 
+Gator is a CLI RSS feed service. It allows users to add feeds the want to be fed.
+
+## Usage
+
+### Example
+
+```bash
+go run . feeds
+```
+
+### Available Commands
+
+#### register
+
+Adds a user
+
+#### reset
+
+Delete all users
+
+#### users
+
+Get all users
+
+#### agg
+
+Long running tasks that listens for feeds
+
+#### addfeed
+
+Add a feed
+
+##### params
+
+feedName - name of the feed
+feedUrl - url of the feed
+
+#### feeds
+
+List a feed
+
+#### follow
+
+Follow a feed
+
+#### unfollow
+
+Unfollow a feed
+
+#### browse
+
 ## Postgress CLI
 
 ### Connect to Postgresql
